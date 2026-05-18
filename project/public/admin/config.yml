@@ -10,6 +10,7 @@ collections:
     label: "Контент сайту"
     delete: false
     files:
+      # 1. КАТАЛОГ ТОВАРІВ
       - name: "products"
         label: "Каталог товарів"
         file: "public/data/products.json"
@@ -21,15 +22,15 @@ collections:
             fields:
               - { name: "id", label: "ID (наприклад: item-1)", widget: "string" }
               - { name: "name", label: "Назва товару", widget: "string" }
-              - { name: "brand", label: "Бренд", widget: "string" }
+              - { name: "brand", label: "Бренд (наприклад: SUPREME)", widget: "string" }
               - { name: "price", label: "Ціна (грн)", widget: "number", value_type: "int" }
               - name: "category"
                 label: "Категорія"
                 widget: "select"
                 options: ["Одяг", "Взуття", "Аксесуари"]
-              - { name: "sizes", label: "Розміри", widget: "string" }
+              - { name: "sizes", label: "Розміри (наприклад: M, L, 42)", widget: "string" }
               - name: "condition"
-                label: "Стан"
+                label: "Стан (для фільтрів)"
                 widget: "select"
                 options:
                   - { label: "Нові (ВІДМІННИЙ)", value: "Відмінний" }
@@ -38,6 +39,42 @@ collections:
               - { name: "imageUrl", label: "Фото товару", widget: "image" }
               - { name: "sold", label: "Товар продано?", widget: "boolean", default: false }
 
+      # 2. ГОЛОВНА СТОРІНКА (МУЛЬТИЯЗИЧНА)
+      - name: "home_page"
+        label: "Головна сторінка"
+        file: "public/data/home.json"
+        delete: false
+        fields:
+          - name: "uk"
+            label: "Українська версія (UKR)"
+            widget: "object"
+            fields:
+              - { name: "heroTitle", label: "Головний заголовок", widget: "string" }
+              - { name: "heroSubtitle", label: "Підзаголовок сайту", widget: "text" }
+              - { name: "ctaText", label: "Текст кнопки каталогу", widget: "string" }
+          - name: "ru"
+            label: "Російська версія (RUS)"
+            widget: "object"
+            fields:
+              - { name: "heroTitle", label: "Главный заголовок", widget: "string" }
+              - { name: "heroSubtitle", label: "Подзаголовок сайта", widget: "text" }
+              - { name: "ctaText", label: "Текст кнопки каталога", widget: "string" }
+
+      # 3. ВІДГУКИ
+      - name: "reviews"
+        label: "Сторінка відгуків"
+        file: "public/data/reviews.json"
+        fields:
+          - name: "reviews"
+            label: "Список відгуків"
+            widget: "list"
+            summary: "{{fields.author}} — {{fields.item}}"
+            fields:
+              - { name: "author", label: "Ім'я покупця", widget: "string" }
+              - { name: "item", label: "Що купив (товар)", widget: "string" }
+              - { name: "text", label: "Текст відгуку", widget: "text" }
+
+      # 4. СТОРІНКА FAQ
       - name: "faq"
         label: "Сторінка FAQ"
         file: "public/data/faq.json"
