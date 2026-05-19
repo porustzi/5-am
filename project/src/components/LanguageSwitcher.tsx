@@ -1,43 +1,34 @@
-import { useState, useEffect } from 'react';
-
-const LANGS = [
-  { code: 'uk', label: 'УКР', flag: '🇺🇦' },
-  { code: 'ru', label: 'РУС', flag: '🇷🇺' },
-];
+// Файл: src/components/LanguageSwitcher.tsx
+import { useLang } from '../context/LanguageContext';
 
 export default function LanguageSwitcher() {
-  // Берём начальный язык из localStorage или ставим 'uk' по дефолту
-  const [active, setActive] = useState(() => localStorage.getItem('lang') || 'uk');
-
-  const handleLangChange = (code: string) => {
-    localStorage.setItem('lang', code);
-    setActive(code);
-    // Триггерим событие, чтобы страницы мгновенно узнали о смене языка
-    window.dispatchEvent(new Event('languageChange'));
-  };
+  const { lang, setLang } = useLang();
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <div className="flex items-center gap-1 px-1.5 py-1.5 bg-black/60 backdrop-blur-md border border-zinc-800 rounded-full">
-        {LANGS.map(lang => (
-          <button
-            key={lang.code}
-            type="button"
-            onClick={() => handleLangChange(lang.code)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono tracking-wider transition-all duration-200 cursor-pointer ${
-              active === lang.code
-                ? 'bg-zinc-900 text-white'
-                : 'text-zinc-500 hover:text-zinc-300'
-            }`}
-          >
-            <span>{lang.flag}</span>
-            <span>{lang.label}</span>
-            {active === lang.code && (
-              <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse ml-0.5" />
-            )}
-          </button>
-        ))}
-      </div>
+    <div className="fixed top-6 right-6 z-50 flex items-center gap-0.5 p-1 border border-zinc-900 rounded-full bg-black">
+      {/* Кнопка УКР */}
+      <button 
+        onClick={() => setLang('ua')}
+        className={`relative flex items-center gap-1.5 px-4 py-2.5 rounded-full transition-all ${
+          lang === 'ua' ? 'bg-[#141414]' : ''
+        }`}
+      >
+        <span className={`font-mono font-bold text-[11px] uppercase ${lang === 'ua' ? 'text-zinc-500' : 'text-zinc-700'}`}>UA</span>
+        <span className={`font-mono font-bold text-[11px] uppercase ${lang === 'ua' ? 'text-white' : 'text-zinc-600'}`}>УКР</span>
+        {lang === 'ua' && <span className="w-2 h-2 rounded-full bg-[#E51616] animate-pulse"></span>}
+      </button>
+
+      {/* Кнопка РУС */}
+      <button 
+        onClick={() => setLang('ru')}
+        className={`relative flex items-center gap-1.5 px-4 py-2.5 rounded-full transition-all ${
+          lang === 'ru' ? 'bg-[#141414]' : ''
+        }`}
+      >
+        <span className={`font-mono font-bold text-[11px] uppercase ${lang === 'ru' ? 'text-zinc-500' : 'text-zinc-700'}`}>RU</span>
+        <span className={`font-mono font-bold text-[11px] uppercase ${lang === 'ru' ? 'text-white' : 'text-zinc-600'}`}>РУС</span>
+        {lang === 'ru' && <span className="w-2 h-2 rounded-full bg-[#E51616] animate-pulse"></span>}
+      </button>
     </div>
   );
 }
