@@ -1,3 +1,12 @@
 {
-  "items": "faa"
+  "faq": {
+    "items": [
+      {
+        "question_ru": "Каковы сроки доставки?",
+        "answer_ru": "Доставка занимает от 1 до 3 рабочих дней.",
+        "question_en": "What are the delivery times?",
+        "answer_en": "Delivery takes 1 to 3 business days."
+      }
+    ]
+  }
 }
