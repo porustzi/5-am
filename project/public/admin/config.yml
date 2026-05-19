@@ -11,7 +11,7 @@ public_folder: "/images/uploads"
 format: "json"
 
 collections:
-  # 1. КОЛЛЕКЦИЯ ДЛЯ КАТАЛОГА ТОВАРОВ (ЧИСТЫЙ СТАРТ)
+  # 1. КОЛЛЕКЦИЯ ДЛЯ КАТАЛОГА ТОВАРОВ (ПОЛНЫЙ КОНТРОЛЬ)
   - name: "products"
     label: "Каталог товаров"
     folder: "project/src/data/live_products"
@@ -19,13 +19,14 @@ collections:
     slug: "{{slug}}"
     fields:
       - { label: "ID товара", name: "id", widget: "string" }
-      - { label: "Название (RU)", name: "title_ru", widget: "string" }
-      - { label: "Название (UA/EN)", name: "title_en", widget: "string", required: false }
+      - { label: "Название товара", name: "name", widget: "string" }
+      - { label: "Бренд", name: "brand", widget: "string", default: "5AM" }
       - { label: "Цена", name: "price", widget: "number", value_type: "int" }
       - { label: "Изображение товара", name: "image", widget: "image" }
-      - { label: "Описание (RU)", name: "description_ru", widget: "text" }
-      - { label: "Описание (UA/EN)", name: "description_en", widget: "text", required: false }
-      - { label: "В наличии", name: "inStock", widget: "boolean", default: true }
+      - { label: "Размеры (строкой, например: S, M, L)", name: "sizes", widget: "string", default: "S, M, L, XL" }
+      - { label: "Telegram продавца (можно с @ или без)", name: "seller_tg", widget: "string", default: "5am_store_official" }
+      - { label: "Состояние вещи", name: "condition", widget: "string", default: "New", required: false }
+      - { label: "Продано (Скрыть кнопку покупки)", name: "sold", widget: "boolean", default: false }
 
   # 2. ФАЙЛЫ ДЛЯ ОТЗЫВОВ, FAQ И ГЛАВНОЙ СТРАНИЦЫ
   - name: "data_lists"
