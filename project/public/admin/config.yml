@@ -11,10 +11,10 @@ public_folder: "/images/uploads"
 format: "json"
 
 collections:
-  # 1. КОЛЛЕКЦИЯ ДЛЯ КАТАЛОГА ТОВАРОВ
+  # 1. КОЛЛЕКЦИЯ ДЛЯ КАТАЛОГА ТОВАРОВ (ЧИСТЫЙ СТАРТ)
   - name: "products"
     label: "Каталог товаров"
-    folder: "project/src/data/products"
+    folder: "project/src/data/live_products"
     create: true
     slug: "{{slug}}"
     fields:
@@ -57,6 +57,7 @@ collections:
         fields:
           - name: "items"
             label: "Вопросы и ответы"
+            widget: "list"
             fields:
               - { label: "Вопрос (RU)", name: "question_ru", widget: "string" }
               - { label: "Ответ (RU)", name: "answer_ru", widget: "text" }
