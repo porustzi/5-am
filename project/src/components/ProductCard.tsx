@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 export interface Product {
   id: string;
   name: string;
@@ -5,27 +7,25 @@ export interface Product {
   price: number;
   category: string;
   sizes: string;
-  imageUrl: string;
+  images: string[];
   seller_tg?: string;
   condition?: string;
   sold?: boolean;
+  description?: string;
 }
 
 export default function ProductCard(product: Product) {
-  const { name, brand, price, sizes, imageUrl, seller_tg, sold } = product;
-  const rawUsername = (seller_tg ?? '').toString().trim().replace(/^@/, '');
-  const username = rawUsername || '5am_store_official';
-  const telegramUrl = 'https://t.me/' + username;
+  const { name, brand, price, sizes, images, sold } = product;
+  const navigate = useNavigate();
+  const cover = Array.isArray(images) ? images[0] : '';
 
   return (
-    <div className={'group relative flex flex-col bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden transition-all ' + (sold ? 'opacity-60' : 'hover:border-zinc-700')}>
+    <div
+      onClick={() => !sold && navigate(`/catalog/${product.id}`)}
+      className={'group relative flex flex-col bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden transition-all cursor-pointer ' + (sold ? 'opacity-60 cursor-default' : 'hover:border-zinc-700')}
+    >
       <div className="relative aspect-[4/5] overflow-hidden bg-zinc-900">
-        <img src={imageUrl} alt={name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-        {!sold && (
-          <div className="absolute top-3 right-3 z-10">
-            <a href={telegramUrl} target="_blank" rel="noopener noreferrer" className="bg-white/90 backdrop-blur-sm text-black text-[10px] font-bold px-3 py-1.5 rounded-lg hover:bg-white transition-all shadow-lg" onClick={(e) => e.stopPropagation()}>Написати</a>
-          </div>
-        )}
+        <img src={cover} alt={name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
         {sold && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/60">
             <span className="text-white font-mono text-[10px] uppercase border border-white/30 px-3 py-1 rounded-full">Продано</span>
