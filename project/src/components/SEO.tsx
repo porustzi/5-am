@@ -92,13 +92,23 @@ export function orgSchema() {
   };
 }
 
+const COND_MAP: Record<string, string> = {
+  'Новий': 'https://schema.org/NewCondition',
+  'Відмінний': 'https://schema.org/NewCondition',
+  'Хороший': 'https://schema.org/UsedCondition',
+  'Б/У': 'https://schema.org/UsedCondition',
+};
+
 export function productSchema(product: {
   name: string;
   price: number;
   brand: string;
   category: string;
   images: string[];
+  sizes?: string;
+  description?: string;
   condition?: string;
+  sold?: boolean;
 }) {
   return {
     '@context': 'https://schema.org',
@@ -106,14 +116,18 @@ export function productSchema(product: {
     name: product.name,
     image: product.images?.[0] ?? OG_IMAGE,
     category: product.category,
-    brand: { '@type': 'Brand', name: product.brand },
+    description: product.description || undefined,
+    ...(product.sizes ? { size: product.sizes } : {}),
+    brand: { '@type': 'Brand', name: product.brand || '5AM' },
     offers: {
       '@type': 'Offer',
       price: product.price,
       priceCurrency: 'UAH',
-      availability: 'https://schema.org/InStock',
+      availability: product.sold ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
     },
-    ...(product.condition ? { condition: product.condition } : {}),
+    ...(product.condition && COND_MAP[product.condition]
+      ? { itemCondition: COND_MAP[product.condition] }
+      : {}),
   };
 }
 

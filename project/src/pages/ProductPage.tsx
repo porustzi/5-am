@@ -70,7 +70,7 @@ export default function ProductPage() {
         title={name}
         description={`${brand} ${name} — ${price} грн. ${description || ''}`.slice(0, 200)}
         path={`/catalog/${product.id}`}
-        jsonLd={productSchema({ name, price, brand: brand || '5AM', category: category || '', images, condition })}
+        jsonLd={productSchema({ name, price, brand: brand || '5AM', category: category || '', images, sizes, description: description || undefined, condition, sold })}
       />
       <div className="max-w-screen-xl mx-auto px-6 pt-24 pb-16">
 
@@ -82,11 +82,12 @@ export default function ProductPage() {
 
           <div className="flex flex-col gap-3">
             <div className="aspect-[4/5] bg-zinc-900 rounded-xl overflow-hidden">
-              <img
-                src={images[activeImg] ?? ''}
-                alt={name}
-                className="w-full h-full object-cover"
-              />
+            <img
+              src={images[activeImg] ?? ''}
+              alt={name}
+              width="600" height="750"
+              className="w-full h-full object-cover"
+            />
             </div>
             {images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto">
@@ -96,7 +97,7 @@ export default function ProductPage() {
                     onClick={() => setActiveImg(i)}
                     className={'flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ' + (activeImg === i ? 'border-white' : 'border-transparent opacity-50 hover:opacity-80')}
                   >
-                    <img src={src} alt="" className="w-full h-full object-cover" />
+                    <img src={src} alt="" width="64" height="64" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
