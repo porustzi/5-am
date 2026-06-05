@@ -32,6 +32,14 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mt-16 pt-8 border-t border-zinc-900">
           <p className="text-zinc-700 font-mono text-[10px] uppercase tracking-widest">© {year} 5AM Store. All rights reserved.</p>
+          <a
+            href="https://krvtsv.netlify.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-500 text-black font-bold text-xs uppercase tracking-widest transition-all hover:scale-105"
+          >
+            Сайт зроблений KRVTSV CORP
+          </a>
           <p className="text-zinc-800 font-mono text-[10px] uppercase tracking-widest">Est. 2024 — Kyiv, Ukraine</p>
         </div>
 
