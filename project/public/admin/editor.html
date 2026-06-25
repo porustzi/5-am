@@ -68,7 +68,8 @@ textarea{min-height:70px;resize:vertical;line-height:1.5}
 </header>
 <div class="msg" id="msg"></div>
 <div class="toolbar" id="toolbar">
-<button class="btn-ghost" onclick="toggleView()" id="toggleBtn">JSON</button>
+ <button class="btn-ghost" onclick="toggleView()" id="toggleBtn">JSON</button>
+<button class="btn-ghost" onclick="translateAll()" id="translateBtn" style="display:none">🌐 Перекласти</button>
 <span style="flex:1"></span>
 <button class="btn-save" id="saveBtn" onclick="save()" style="display:none">Зберегти</button>
 </div>
@@ -282,6 +283,7 @@ async function loadFile() {
     currentData = getTemplate(path);
     document.getElementById('rawEditor').value = JSON.stringify(currentData, null, 2);
     document.getElementById('saveBtn').style.display = 'inline-block';
+    document.getElementById('translateBtn').style.display = 'inline-block';
     renderForm();
     return;
   }
@@ -292,6 +294,7 @@ async function loadFile() {
     currentData = JSON.parse(text);
     document.getElementById('rawEditor').value = JSON.stringify(currentData, null, 2);
     document.getElementById('saveBtn').style.display = 'inline-block';
+    document.getElementById('translateBtn').style.display = 'inline-block';
     renderForm();
   } catch(e) {
     document.getElementById('formContent').innerHTML = '<div class="empty">❌ ' + e.message + '</div>';
@@ -412,8 +415,10 @@ function removeItem(idx) {
 
 async function save() {
   const btn = document.getElementById('saveBtn');
-  btn.disabled = true; btn.textContent = 'Збереження...';
+  btn.disabled = true;
   try {
+    await autoTranslate();
+    btn.textContent = 'Збереження...';
     let data;
     const fileName = path.split('/').pop();
     if (fileName === 'reviews.json') {
@@ -439,6 +444,75 @@ async function save() {
     msg('✅ Збережено!', 'ok');
   } catch(e) { msg('❌ ' + e.message, 'err'); }
   btn.disabled = false; btn.textContent = 'Зберегти';
+}
+
+// ─── Translation ───────────────────────────────────────────────────
+async function translateOne(text, to) {
+  if (!text || !text.trim()) return '';
+  try {
+    const resp = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text, to: to }),
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    return data.translated || '';
+  } catch(e) {
+    console.error('Translate error:', e);
+    return '';
+  }
+}
+
+async function translateAll() {
+  const btn = document.getElementById('translateBtn');
+  if (!btn) return;
+  btn.disabled = true; btn.textContent = 'Переклад...';
+
+  const fields = document.querySelectorAll('[id^="f-"]');
+  for (const el of fields) {
+    const id = el.id.replace('f-', '');
+    if (id.endsWith('_ru') || id.endsWith('_en')) continue;
+    if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
+      const val = el.value.trim();
+      if (!val) continue;
+
+      const ruEl = document.getElementById('f-' + id + '_ru');
+      if (ruEl && !ruEl.value.trim()) {
+        const tr = await translateOne(val, 'ru');
+        if (tr) ruEl.value = tr;
+      }
+      const enEl = document.getElementById('f-' + id + '_en');
+      if (enEl && !enEl.value.trim()) {
+        const tr = await translateOne(val, 'en');
+        if (tr) enEl.value = tr;
+      }
+    }
+  }
+  btn.disabled = false; btn.textContent = '🌐 Перекласти';
+  msg('✅ Переклад завершено', 'ok');
+}
+
+async function autoTranslate() {
+  const fields = document.querySelectorAll('[id^="f-"]');
+  for (const el of fields) {
+    const id = el.id.replace('f-', '');
+    if (id.endsWith('_ru') || id.endsWith('_en')) continue;
+    if (el.tagName !== 'TEXTAREA' && el.tagName !== 'INPUT') continue;
+    const val = el.value.trim();
+    if (!val) continue;
+
+    const ruEl = document.getElementById('f-' + id + '_ru');
+    if (ruEl && !ruEl.value.trim() && val) {
+      const tr = await translateOne(val, 'ru');
+      if (tr) ruEl.value = tr;
+    }
+    const enEl = document.getElementById('f-' + id + '_en');
+    if (enEl && !enEl.value.trim() && val) {
+      const tr = await translateOne(val, 'en');
+      if (tr) enEl.value = tr;
+    }
+  }
 }
 
 // ─── Image Upload ──────────────────────────────────────────────────
