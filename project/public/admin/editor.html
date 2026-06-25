@@ -83,7 +83,8 @@ const p = new URLSearchParams(location.search);
 const path = p.get('path'), name = p.get('name') || path;
 const type = p.get('type') || 'file';
 const folder = p.get('folder') || '';
-document.getElementById('title').textContent = name || '';
+const isNew = p.get('new') === 'true';
+document.getElementById('title').textContent = (isNew ? 'Новий ' : '') + (name || '');
 
 let currentFile = null, currentData = null, view = 'form', currentSha = null;
 
@@ -256,7 +257,34 @@ if (!path) { document.getElementById('formContent').innerHTML = '<div class="emp
 else if (type === 'folder') loadFolder();
 else loadFile();
 
+function getTemplate(filePath) {
+  const fileName = filePath.split('/').pop();
+  if (fileName.includes('faq') || fileName.includes('question')) {
+    return { question: '', question_ru: '', question_en: '', answer: '', answer_ru: '', answer_en: '' };
+  }
+  return { id: '', brand: '', price: 0, name: '', name_ru: '', name_en: '', sizes: '', sizes_ru: '', sizes_en: '',
+    seller_tg: '', condition: '', condition_ru: '', condition_en: '', category: '', category_ru: '', category_en: '',
+    description: '', description_ru: '', description_en: '', images: [], sold: false };
+}
+
+function createNew(kind) {
+  const ts = Date.now();
+  if (kind === 'faq') {
+    location.href = '/admin/editor.html?path=' + encodeURIComponent(path + '/faq-' + ts + '.json') + '&name=Новий+FAQ&type=file&new=true';
+  } else {
+    location.href = '/admin/editor.html?path=' + encodeURIComponent(path + '/product-' + ts + '.json') + '&name=Новий+товар&type=file&new=true';
+  }
+}
+
 async function loadFile() {
+  if (isNew) {
+    currentSha = null;
+    currentData = getTemplate(path);
+    document.getElementById('rawEditor').value = JSON.stringify(currentData, null, 2);
+    document.getElementById('saveBtn').style.display = 'inline-block';
+    renderForm();
+    return;
+  }
   try {
     const d = await api('GET', '/api/git/github/contents/' + path + '?ref=main');
     currentSha = d.sha;
@@ -276,14 +304,15 @@ async function loadFolder() {
     const el = document.getElementById('formContent');
     const isFaq = path.includes('faq');
     const isProducts = path.includes('products');
+    const folderPath = path;
 
     if (!items || !items.length) {
       el.innerHTML = '<div class="empty">Папка порожня</div>';
-      return;
     }
 
     if (isFaq) {
       let html = '<div style="background:#fff;border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.04)"><div class="block-title" style="padding:14px 18px 8px">FAQ файли</div>';
+      html += '<div style="padding:0 18px 12px"><button class="btn-save" style="padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:#000;color:#fff" onclick="createNew(\'faq\')">+ Створити FAQ</button></div>';
       items.forEach(f => {
         const name = f.name.replace('.json', '');
         html += '<div class="file-item" onclick="location.href=\'/admin/editor.html?path=' + encodeURIComponent(f.path) + '&name=' + encodeURIComponent(name) + '&type=file\'">';
@@ -294,7 +323,9 @@ async function loadFolder() {
       el.innerHTML = html;
     } else if (isProducts) {
       let html = '<div style="background:#fff;border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.04)"><div class="block-title" style="padding:14px 18px 8px">Товари</div>';
+      html += '<div style="padding:0 18px 12px"><button class="btn-save" style="padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:#000;color:#fff" onclick="createNew(\'product\')">+ Створити товар</button></div>';
       items.forEach(f => {
+        if (f.name === '.gitkeep') return;
         const name = (f.name || '').replace('.json', '').substring(0, 60);
         html += '<div class="file-item" onclick="location.href=\'/admin/editor.html?path=' + encodeURIComponent(f.path) + '&name=' + esc(name) + '&type=file\'">';
         html += '<div class="name"><span>📦</span> ' + esc(name) + '</div><div class="meta">' + f.path + '</div>';
@@ -396,7 +427,7 @@ async function save() {
     }
 
     const body = {
-      message: 'Update ' + path,
+      message: (isNew ? 'Create ' : 'Update ') + path,
       content: JSON.stringify(data, null, 2),
       branch: 'main',
     };
