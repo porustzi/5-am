@@ -50,6 +50,14 @@ textarea{min-height:70px;resize:vertical;line-height:1.5}
 .form-view.hidden{display:none}
 .loading{padding:40px;text-align:center;color:#94a3b8;font-size:14px}
 .empty{padding:40px;text-align:center;color:#94a3b8}
+.upload-area{margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.upload-btn{padding:6px 14px;border:1.5px dashed #cbd5e1;border-radius:8px;background:transparent;color:#64748b;font-size:12px;font-weight:600;cursor:pointer}
+.upload-btn:hover{border-color:#000;color:#000}
+.upload-btn:disabled{opacity:.5;cursor:not-allowed}
+.upload-status{font-size:12px;min-width:100px}
+.img-previews{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.img-preview{width:80px;height:80px;border-radius:6px;object-fit:cover;border:1px solid #e2e8f0;cursor:pointer}
+.img-preview:hover{border-color:#dc2626;opacity:.7}
 </style>
 </head>
 <body>
@@ -178,7 +186,16 @@ function makeFormField(f, val) {
   const v = val !== undefined && val !== null ? val : '';
   let html = '<div class="row"><label>' + f.label + '</label>';
   if (f.hint) html += '<div style="font-size:11px;color:#94a3b8;margin-bottom:4px">' + f.hint + '</div>';
-  if (f.type === 'textarea') {
+  if (f.type === 'textarea' && f.name === 'images') {
+    const urls = Array.isArray(v) ? v.join('\n') : (v || '');
+    html += '<textarea id="' + id + '" oninput="updatePreviews()">' + esc(urls) + '</textarea>';
+    html += '<div class="upload-area">';
+    html += '<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="uploadImage()" />';
+    html += '<button type="button" class="upload-btn" onclick="document.getElementById(\'fileInput\').click()">+ Завантажити зображення</button>';
+    html += '<span class="upload-status" id="uploadStatus"></span>';
+    html += '</div>';
+    html += '<div class="img-previews" id="imgPreviews"></div>';
+  } else if (f.type === 'textarea') {
     html += '<textarea id="' + id + '">' + esc(v) + '</textarea>';
   } else if (f.type === 'number') {
     html += '<input type="number" id="' + id + '" value="' + esc(v) + '" />';
@@ -314,6 +331,7 @@ function renderForm() {
   } else {
     el.innerHTML = renderObjectEditor(currentData, PRODUCT_FIELDS);
   }
+  setTimeout(updatePreviews, 50);
 }
 
 function collectArray(fields) {
@@ -373,7 +391,8 @@ async function save() {
     } else if (view === 'raw') {
       data = JSON.parse(document.getElementById('rawEditor').value);
     } else {
-      data = collectForm(PRODUCT_FIELDS);
+      const fields = fileName === 'home.json' ? HOME_FIELDS : fileName.includes('faq') ? FAQ_FIELDS : PRODUCT_FIELDS;
+      data = collectForm(fields);
     }
 
     const body = {
@@ -385,9 +404,66 @@ async function save() {
 
     await api('PUT', '/api/git/github/contents/' + path, body);
     currentData = data;
+    currentSha = null;
     msg('✅ Збережено!', 'ok');
   } catch(e) { msg('❌ ' + e.message, 'err'); }
   btn.disabled = false; btn.textContent = 'Зберегти';
+}
+
+// ─── Image Upload ──────────────────────────────────────────────────
+async function uploadImage() {
+  const file = document.getElementById('fileInput').files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { msg('❌ Файл занадто великий (макс 5MB)', 'err'); return; }
+
+  const status = document.getElementById('uploadStatus');
+  status.textContent = 'Завантаження...';
+  status.style.color = '#64748b';
+
+  const reader = new FileReader();
+  reader.onload = async function() {
+    try {
+      const resp = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: file.name, content: reader.result }),
+      });
+      if (!resp.ok) { const e = await resp.json().catch(()=>({})); throw new Error(e.error || 'HTTP ' + resp.status); }
+      const data = await resp.json();
+
+      const ta = document.getElementById('f-images');
+      if (ta) {
+        const urls = ta.value.trim();
+        ta.value = urls ? urls + '\n' + data.url : data.url;
+        updatePreviews();
+      }
+      status.textContent = '✓';
+      status.style.color = '#16a34a';
+      setTimeout(function() { status.textContent = ''; }, 2000);
+    } catch(e) {
+      status.textContent = '❌ ' + e.message;
+      status.style.color = '#dc2626';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function updatePreviews() {
+  const ta = document.getElementById('f-images');
+  const container = document.getElementById('imgPreviews');
+  if (!ta || !container) return;
+  const urls = ta.value.split('\n').map(function(s) { return s.trim(); }).filter(Boolean);
+  container.innerHTML = urls.map(function(u) {
+    return '<img class="img-preview" src="' + esc(u) + '" onclick="removeImage(\'' + esc(u.replace(/'/g, "\\'")) + '\')" title="Клік щоб видалити" loading="lazy" />';
+  }).join('');
+}
+
+function removeImage(url) {
+  const ta = document.getElementById('f-images');
+  if (!ta) return;
+  const urls = ta.value.split('\n').map(function(s) { return s.trim(); }).filter(Boolean);
+  ta.value = urls.filter(function(u) { return u !== url; }).join('\n');
+  updatePreviews();
 }
 </script>
 </body>
