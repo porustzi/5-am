@@ -58,7 +58,6 @@ export async function onRequest(context) {
   // Build GitHub API URL
   let gitPath = url.pathname.replace(/^\/api\/git\//, '').replace(/^github\/contents\//, '');
   if (!gitPath.startsWith(BASE_PATH)) gitPath = BASE_PATH + gitPath;
-  const encodedPath = gitPath.split('/').map(encodeURIComponent).join('/');
   const ref = url.searchParams.get('ref') || BRANCH;
   const githubToken = env.GITHUB_PAT;
   if (!githubToken) return json({ error: 'github_pat_not_set' }, 500);
@@ -67,10 +66,10 @@ export async function onRequest(context) {
   let targetUrl, targetMethod = request.method;
 
   if (request.method === 'GET') {
-    targetUrl = `${repoApi}/contents/${encodedPath}?ref=${ref}`;
+    targetUrl = `${repoApi}/contents/${gitPath}?ref=${ref}`;
     targetMethod = 'GET';
   } else if (request.method === 'PUT') {
-    targetUrl = `${repoApi}/contents/${encodedPath}`;
+    targetUrl = `${repoApi}/contents/${gitPath}`;
     targetMethod = 'PUT';
   } else {
     return json({ error: 'method_not_supported' }, 405);
