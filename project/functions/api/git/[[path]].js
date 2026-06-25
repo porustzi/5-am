@@ -56,7 +56,8 @@ export async function onRequest(context) {
   if (!payload) return json({ error: 'unauthorized' }, 401);
 
   // Build GitHub API URL
-  let gitPath = BASE_PATH + url.pathname.replace(/^\/api\/git\//, '');
+  let gitPath = url.pathname.replace(/^\/api\/git\//, '').replace(/^github\/contents\//, '');
+  gitPath = BASE_PATH + gitPath;
   const ref = url.searchParams.get('ref') || BRANCH;
   const githubToken = env.GITHUB_PAT;
   if (!githubToken) return json({ error: 'github_pat_not_set' }, 500);
