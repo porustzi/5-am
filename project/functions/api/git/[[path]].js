@@ -66,10 +66,12 @@ export async function onRequest(context) {
   let targetUrl, targetMethod = request.method;
 
   if (request.method === 'GET') {
-    targetUrl = `${repoApi}/contents/${gitPath}?ref=${ref}`;
+    const encoded = encodeURI(gitPath);
+    targetUrl = `${repoApi}/contents/${encoded}?ref=${ref}`;
     targetMethod = 'GET';
   } else if (request.method === 'PUT') {
-    targetUrl = `${repoApi}/contents/${gitPath}`;
+    const encoded = encodeURI(gitPath);
+    targetUrl = `${repoApi}/contents/${encoded}`;
     targetMethod = 'PUT';
   } else {
     return json({ error: 'method_not_supported' }, 405);
