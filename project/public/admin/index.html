@@ -1,12 +1,68 @@
-<!DOCTYPE html>
-<html lang="ru">
+<!doctype html>
+<html lang="uk">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Панель управления</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Адмінка — 5AM STORE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:#0f172a;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.bg{position:fixed;inset:0;overflow:hidden}
+.bg::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 50%,#1a1a2e 0%,transparent 50%),radial-gradient(circle at 70% 30%,#e2e8f0 0%,transparent 40%),radial-gradient(circle at 50% 80%,#334155 0%,transparent 40%)}
+.card{position:relative;background:rgba(255,255,255,.06);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:44px 36px;width:400px;max-width:90%;text-align:center}
+.logo{width:48px;height:48px;background:#fff;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#000;margin-bottom:16px}
+h1{font-size:20px;color:#f1f5f9;margin-bottom:4px}
+.sub{color:#94a3b8;font-size:13px;margin-bottom:28px}
+label{display:block;font-size:12px;font-weight:600;color:#cbd5e1;text-align:left;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+input{width:100%;padding:12px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;font-size:15px;color:#f1f5f9;outline:none;margin-bottom:14px;transition:border-color .2s;font-family:inherit}
+input::placeholder{color:#475569}
+input:focus{border-color:#fff}
+button{width:100%;padding:13px;background:#fff;color:#000;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:4px}
+button:hover{background:#e2e8f0;transform:translateY(-1px)}
+.error{color:#fca5a5;font-size:13px;margin-top:10px;display:none}
+.error.show{display:block}
+.preview-link{color:#64748b;font-size:12px;margin-top:20px;display:block;text-decoration:none}
+.preview-link:hover{color:#94a3b8}
+</style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+<div class="bg"></div>
+<div class="card">
+<div class="logo">5</div>
+<h1>5AM STORE</h1>
+<p class="sub">Керування контентом магазину</p>
+<div class="error" id="error">Невірний логін або пароль</div>
+<form id="form">
+<label>Логін</label>
+<input type="text" id="username" autocomplete="username" />
+<label>Пароль</label>
+<input type="password" id="password" autocomplete="current-password" />
+<button type="submit">Увійти</button>
+</form>
+<a href="/" class="preview-link" target="_blank">Переглянути сайт →</a>
+</div>
+<script>
+if (localStorage.getItem('admin_token')) window.location.href = '/admin/dashboard.html';
+document.getElementById('form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const u = document.getElementById('username').value;
+  const p = document.getElementById('password').value;
+  const err = document.getElementById('error');
+  err.classList.remove('show');
+  try {
+    const res = await fetch('/api/auth/token', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({username:u,password:p}),
+    });
+    const data = await res.json();
+    if (res.ok && data.access_token) {
+      localStorage.setItem('admin_token', data.access_token);
+      window.location.href = '/admin/dashboard.html';
+    } else {
+      err.classList.add('show');
+    }
+  } catch { err.textContent = 'Помилка з\'єднання'; err.classList.add('show'); }
+});
+</script>
 </body>
 </html>

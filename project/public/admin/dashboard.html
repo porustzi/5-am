@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Дашборд — 5AM STORE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:#f8fafc;min-height:100vh}
+header{background:#000;color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+header .brand{display:flex;align-items:center;gap:10px}
+header .brand .logo{width:32px;height:32px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#000}
+header h1{font-size:16px;font-weight:600}
+header .actions{display:flex;align-items:center;gap:10px}
+header .actions a{color:#94a3b8;text-decoration:none;font-size:13px}
+header .actions a:hover{color:#fff}
+header button{background:transparent;color:#94a3b8;border:1px solid #334155;padding:7px 14px;border-radius:7px;font-size:13px;cursor:pointer}
+header button:hover{color:#fff;border-color:#94a3b8}
+.grid{max-width:800px;margin:28px auto;padding:0 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.card{background:#fff;border-radius:14px;padding:22px;box-shadow:0 1px 6px rgba(0,0,0,.04);cursor:pointer;transition:all .15s;border:1px solid #e2e8f0;display:flex;gap:14px;align-items:flex-start}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06);border-color:#cbd5e1}
+.card .icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0}
+.card .icon.r{background:#fef2f2;color:#dc2626}.card .icon.b{background:#eff6ff;color:#3b82f6}
+.card .icon.g{background:#f0fdf4;color:#22c55e}.card .icon.a{background:#fffbeb;color:#f59e0b}
+.card .icon.p{background:#faf5ff;color:#a855f7}.card .icon.s{background:#f8fafc;color:#64748b}
+.card .icon.d{background:#fef2f2;color:#e11d48}
+.card h2{font-size:14px;color:#000;margin-bottom:4px}
+.card p{font-size:12px;color:#94a3b8;line-height:1.5}
+.card .arrow{color:#cbd5e1;font-size:14px;flex-shrink:0;margin-top:2px}
+</style>
+</head>
+<body>
+<header>
+<div class="brand"><div class="logo">5</div><h1>5AM STORE — Адмінка</h1></div>
+<div class="actions">
+<a href="/" target="_blank">Сайт →</a>
+<button onclick="logout()">Вийти</button>
+</div>
+</header>
+<div class="grid" id="grid"></div>
+<script>
+const token = localStorage.getItem('admin_token');
+if (!token) { window.location.href = '/admin/'; }
+function logout() { localStorage.removeItem('admin_token'); window.location.href = '/admin/'; }
+
+const files = [
+  { name:'products', label:'Товари', path:'src/data/products', color:'r', desc:'Список товарів (JSON файли)' },
+  { name:'home', label:'Головна', path:'src/data/home.json', color:'b', desc:'Hero текст, підзаголовок, кнопка (3 мови)' },
+  { name:'reviews', label:'Відгуки', path:'src/data/reviews.json', color:'g', desc:'Відгуки покупців' },
+  { name:'faq', label:'FAQ', path:'src/data/faq', color:'a', desc:'Питання та відповіді (окремі файли)' },
+];
+
+document.getElementById('grid').innerHTML = files.map(f => `
+  <div class="card" onclick="location.href='/admin/editor.html?path=${encodeURIComponent(f.path)}&name=${encodeURIComponent(f.label)}&type=${f.name === 'products' || f.name === 'faq' ? 'folder' : 'file'}${f.name === 'products' ? '&folder=' + encodeURIComponent(f.path) : ''}${f.name === 'faq' ? '&folder=' + encodeURIComponent(f.path) : ''}'">
+    <div class="icon ${f.color}">${f.name === 'products' ? '📦' : f.name === 'home' ? '🏠' : f.name === 'reviews' ? '⭐' : '❓'}</div>
+    <div><h2>${f.label}</h2><p>${f.desc}</p></div>
+    <div class="arrow">→</div>
+  </div>
+`).join('');
+</script>
+</body>
+</html>

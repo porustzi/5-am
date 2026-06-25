@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Редактор — 5AM STORE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:#f1f5f9;min-height:100vh;display:flex;flex-direction:column}
+header{background:#000;color:#fff;padding:10px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+header a{color:#94a3b8;text-decoration:none;font-size:14px}
+header a:hover{color:#fff}
+header h1{font-size:16px;font-weight:600}
+header .sep{color:#475569}
+.toolbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:10px 24px;display:flex;align-items:center;gap:10px;position:sticky;top:48px;z-index:10;flex-wrap:wrap}
+.toolbar button{padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none}
+.btn-save{background:#000;color:#fff}.btn-save:hover{background:#1a1a1a}.btn-save:disabled{opacity:.5}
+.btn-ghost{background:#f1f5f9;color:#475569}
+.btn-ghost:hover{background:#e2e8f0}
+.btn-danger{background:#fef2f2;color:#dc2626}
+.btn-danger:hover{background:#fecaca}
+.msg{padding:10px 24px;font-size:13px;display:none}
+.msg.ok{display:block;background:#f0fdf4;color:#166534;border-bottom:1px solid #bbf7d0}
+.msg.err{display:block;background:#fef2f2;color:#991b1b;border-bottom:1px solid #fecaca}
+.content{flex:1;max-width:700px;margin:0 auto;padding:20px 16px 60px;width:100%}
+.file-list{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.file-item{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .1s}
+.file-item:last-child{border-bottom:none}
+.file-item:hover{background:#f8fafc}
+.file-item .name{font-weight:500;font-size:14px;color:#000;display:flex;align-items:center;gap:8px}
+.file-item .meta{font-size:12px;color:#94a3b8}
+.file-schema{font-size:11px;color:#64748b;background:#f1f5f9;padding:2px 8px;border-radius:4px}
+.block{margin-bottom:24px}
+.block-title{font-size:14px;font-weight:700;color:#000;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #000}
+.row{margin-bottom:12px}
+.row label{display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:4px}
+input[type=text],input[type=url],input[type=number],textarea,select{width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;outline:none;background:#fff}
+input:focus,textarea:focus,select:focus{border-color:#000}
+textarea{min-height:70px;resize:vertical;line-height:1.5}
+.section-title{font-size:13px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid #e2e8f0}
+.list-row{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px;margin-bottom:8px;position:relative}
+.list-row .del-btn{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:5px;border:none;background:#fef2f2;color:#dc2626;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.list-row .del-btn:hover{background:#fecaca}
+.add-btn{display:inline-flex;align-items:center;gap:4px;padding:7px 14px;border:2px dashed #cbd5e1;border-radius:8px;background:transparent;color:#64748b;font-size:12px;font-weight:600;cursor:pointer;width:100%;justify-content:center;margin-top:6px}
+.add-btn:hover{border-color:#000;color:#000;background:#f8fafc}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.cols2{grid-template-columns:1fr}}
+.raw-editor{display:none;flex:1;flex-direction:column}.raw-editor.show{display:flex}
+.raw-editor textarea{flex:1;border:none;outline:none;font-family:monospace;font-size:13px;line-height:1.5;resize:none;padding:16px 20px;background:#fafbfc;min-height:400px}
+.form-view.hidden{display:none}
+.loading{padding:40px;text-align:center;color:#94a3b8;font-size:14px}
+.empty{padding:40px;text-align:center;color:#94a3b8}
+</style>
+</head>
+<body>
+<header>
+<a href="/admin/dashboard.html">← Дашборд</a>
+<span class="sep">/</span>
+<h1 id="title"></h1>
+</header>
+<div class="msg" id="msg"></div>
+<div class="toolbar" id="toolbar">
+<button class="btn-ghost" onclick="toggleView()" id="toggleBtn">JSON</button>
+<span style="flex:1"></span>
+<button class="btn-save" id="saveBtn" onclick="save()" style="display:none">Зберегти</button>
+</div>
+<div class="form-view" id="formView"><div class="content" id="formContent"><div class="loading">Завантаження...</div></div></div>
+<div class="raw-editor" id="rawView"><textarea id="rawEditor" spellcheck="false"></textarea></div>
+
+<script>
+const token = localStorage.getItem('admin_token');
+if (!token) location.href = '/admin/';
+
+const p = new URLSearchParams(location.search);
+const path = p.get('path'), name = p.get('name') || path;
+const type = p.get('type') || 'file';
+const folder = p.get('folder') || '';
+document.getElementById('title').textContent = name || '';
+
+let currentFile = null, currentData = null, view = 'form', currentSha = null;
+
+function msg(text, type) {
+  const el = document.getElementById('msg');
+  el.textContent = text; el.className = 'msg ' + type;
+  setTimeout(() => { el.className = 'msg'; }, 3000);
+}
+
+function toggleView() {
+  const btn = document.getElementById('toggleBtn');
+  if (view === 'form') {
+    view = 'raw'; btn.textContent = 'Форма';
+    document.getElementById('formView').classList.add('hidden');
+    document.getElementById('rawView').classList.add('show');
+    if (currentFile && currentData) document.getElementById('rawEditor').value = JSON.stringify(currentData, null, 2);
+  } else {
+    view = 'form'; btn.textContent = 'JSON';
+    try { currentData = JSON.parse(document.getElementById('rawEditor').value); renderForm(); msg('✅ JSON валідний', 'ok'); }
+    catch(e) { msg('❌ Невірний JSON: ' + e.message, 'err'); return; }
+    document.getElementById('formView').classList.remove('hidden');
+    document.getElementById('rawView').classList.remove('show');
+  }
+}
+
+async function api(method, url, body) {
+  const res = await fetch(url, {
+    method,
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (res.status === 401) { localStorage.removeItem('admin_token'); location.href = '/admin/'; }
+  if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.error || d.details || `HTTP ${res.status}`); }
+  return res.json();
+}
+
+// ─── Product Schema ───────────────────────────────────────────────
+const PRODUCT_FIELDS = [
+  { name:'id', label:'ID', readonly:true },
+  { name:'brand', label:'Бренд' },
+  { name:'price', label:'Ціна (грн)', type:'number' },
+  { name:'name', label:'Назва (укр)' },
+  { name:'name_ru', label:'Назва (рус)' },
+  { name:'name_en', label:'Назва (en)' },
+  { name:'sizes', label:'Розмір (укр)' },
+  { name:'sizes_ru', label:'Розмір (рус)' },
+  { name:'sizes_en', label:'Розмір (en)' },
+  { name:'seller_tg', label:'Telegram продавця' },
+  { name:'condition', label:'Стан (укр)' },
+  { name:'condition_ru', label:'Стан (рус)' },
+  { name:'condition_en', label:'Стан (en)' },
+  { name:'category', label:'Категорія (укр)' },
+  { name:'category_ru', label:'Категорія (рус)' },
+  { name:'category_en', label:'Категорія (en)' },
+  { name:'description', label:'Опис (укр)', type:'textarea' },
+  { name:'description_ru', label:'Опис (рус)', type:'textarea' },
+  { name:'description_en', label:'Опис (en)', type:'textarea' },
+  { name:'images', label:'Зображення (кома або рядок)', type:'textarea', hint:'Кожен URL на новому рядку' },
+  { name:'sold', label:'Продано', type:'checkbox' },
+];
+
+// ─── FAQ Schema ────────────────────────────────────────────────────
+const FAQ_FIELDS = [
+  { name:'question', label:'Питання (укр)' },
+  { name:'question_ru', label:'Питання (рус)' },
+  { name:'question_en', label:'Питання (en)' },
+  { name:'answer', label:'Відповідь (укр)', type:'textarea' },
+  { name:'answer_ru', label:'Відповідь (рус)', type:'textarea' },
+  { name:'answer_en', label:'Відповідь (en)', type:'textarea' },
+];
+
+// ─── Reviews Schema ────────────────────────────────────────────────
+const REVIEW_FIELDS = [
+  { name:'author', label:'Автор' },
+  { name:'item', label:'Товар' },
+  { name:'text', label:'Текст', type:'textarea' },
+];
+
+// ─── Home Schema ───────────────────────────────────────────────────
+const HOME_FIELDS = [
+  { name:'heroTitle', label:'heroTitle (укр)' },
+  { name:'heroTitle_ru', label:'heroTitle (рус)' },
+  { name:'heroTitle_en', label:'heroTitle (en)' },
+  { name:'heroSubtitle', label:'heroSubtitle (укр)' },
+  { name:'heroSubtitle_ru', label:'heroSubtitle (рус)' },
+  { name:'heroSubtitle_en', label:'heroSubtitle (en)' },
+  { name:'ctaText', label:'ctaText (укр)' },
+  { name:'ctaText_ru', label:'ctaText (рус)' },
+  { name:'ctaText_en', label:'ctaText (en)' },
+];
+
+// ─── App Schema (reviews.json root) ────────────────────────────────
+const APP_SCHEMAS = {
+  'home.json': { fields: HOME_FIELDS, single: true },
+  'reviews.json': { fields: REVIEW_FIELDS, arrayField: 'items', single: true },
+};
+
+function makeFormField(f, val) {
+  const id = 'f-' + f.name.replace(/\./g, '_');
+  const v = val !== undefined && val !== null ? val : '';
+  let html = '<div class="row"><label>' + f.label + '</label>';
+  if (f.hint) html += '<div style="font-size:11px;color:#94a3b8;margin-bottom:4px">' + f.hint + '</div>';
+  if (f.type === 'textarea') {
+    html += '<textarea id="' + id + '">' + esc(v) + '</textarea>';
+  } else if (f.type === 'number') {
+    html += '<input type="number" id="' + id + '" value="' + esc(v) + '" />';
+  } else if (f.type === 'checkbox') {
+    html += '<label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="' + id + '" ' + (v ? 'checked' : '') + ' style="width:auto" /> ' + f.label + '</label>';
+  } else {
+    html += '<input type="text" id="' + id + '" value="' + esc(v) + '"' + (f.readonly ? ' readonly style="background:#f1f5f9"' : '') + ' />';
+  }
+  html += '</div>';
+  return html;
+}
+
+function esc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function collectForm(fields) {
+  const data = {};
+  fields.forEach(f => {
+    const el = document.getElementById('f-' + f.name.replace(/\./g, '_'));
+    if (!el) return;
+    if (f.type === 'checkbox') data[f.name] = el.checked;
+    else if (f.type === 'number') data[f.name] = Number(el.value);
+    else if (f.type === 'textarea' && f.name === 'images') {
+      data[f.name] = el.value.split('\n').map(s => s.trim()).filter(Boolean);
+    } else data[f.name] = el.value;
+  });
+  return data;
+}
+
+function renderObjectEditor(obj, fields) {
+  let html = '<div class="editor-wrap" style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 6px rgba(0,0,0,.04)">';
+  html += '<div class="block-title">' + (name || 'Редактор') + '</div>';
+  fields.forEach(f => { html += makeFormField(f, obj[f.name]); });
+  html += '</div>';
+  return html;
+}
+
+function renderArrayEditor(items, fields, arrayLabel) {
+  let html = '<div class="editor-wrap" style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 6px rgba(0,0,0,.04)">';
+  html += '<div class="block-title">' + (arrayLabel || name || 'Список') + ' (' + items.length + ')</div>';
+  html += '<div id="arrayContainer">';
+  items.forEach((item, i) => {
+    html += '<div class="list-row" data-idx="' + i + '">';
+    html += '<button class="del-btn" onclick="removeItem(' + i + ')">✕</button>';
+    html += '<div style="font-size:11px;color:#94a3b8;margin-bottom:6px">#' + (i+1) + '</div>';
+    fields.forEach(f => { html += makeFormField(f, item[f.name]); });
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<button class="add-btn" onclick="addItem()">➕ Додати</button>';
+  html += '</div>';
+  return html;
+}
+
+// ─── Page load ─────────────────────────────────────────────────────
+if (!path) { document.getElementById('formContent').innerHTML = '<div class="empty">Немає шляху</div>'; }
+else if (type === 'folder') loadFolder();
+else loadFile();
+
+async function loadFile() {
+  try {
+    const d = await api('GET', '/api/git/github/contents/' + path + '?ref=main');
+    currentSha = d.sha;
+    const text = d.content ? decodeURIComponent(escape(atob(d.content))) : '{}';
+    currentData = JSON.parse(text);
+    document.getElementById('rawEditor').value = JSON.stringify(currentData, null, 2);
+    document.getElementById('saveBtn').style.display = 'inline-block';
+    renderForm();
+  } catch(e) {
+    document.getElementById('formContent').innerHTML = '<div class="empty">❌ ' + e.message + '</div>';
+  }
+}
+
+async function loadFolder() {
+  try {
+    const items = await api('GET', '/api/git/github/contents/' + path + '?ref=main');
+    const el = document.getElementById('formContent');
+    const isFaq = path.includes('faq');
+    const isProducts = path.includes('products');
+
+    if (!items || !items.length) {
+      el.innerHTML = '<div class="empty">Папка порожня</div>';
+      return;
+    }
+
+    if (isFaq) {
+      let html = '<div style="background:#fff;border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.04)"><div class="block-title" style="padding:14px 18px 8px">FAQ файли</div>';
+      items.forEach(f => {
+        const name = f.name.replace('.json', '');
+        html += '<div class="file-item" onclick="location.href=\'/admin/editor.html?path=' + encodeURIComponent(f.path) + '&name=' + encodeURIComponent(name) + '&type=file\'">';
+        html += '<div class="name"><span>❓</span> ' + esc(name) + '</div><div class="meta">' + f.path + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+      el.innerHTML = html;
+    } else if (isProducts) {
+      let html = '<div style="background:#fff;border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.04)"><div class="block-title" style="padding:14px 18px 8px">Товари</div>';
+      items.forEach(f => {
+        const name = (f.name || '').replace('.json', '').substring(0, 60);
+        html += '<div class="file-item" onclick="location.href=\'/admin/editor.html?path=' + encodeURIComponent(f.path) + '&name=' + esc(name) + '&type=file\'">';
+        html += '<div class="name"><span>📦</span> ' + esc(name) + '</div><div class="meta">' + f.path + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+      el.innerHTML = html;
+    } else {
+      let html = '<div style="background:#fff;border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.04)"><div class="block-title" style="padding:14px 18px 8px">Файли</div>';
+      items.forEach(f => {
+        html += '<div class="file-item" onclick="location.href=\'/admin/editor.html?path=' + encodeURIComponent(f.path) + '&name=' + esc(f.name) + '&type=file\'">';
+        html += '<div class="name">📄 ' + esc(f.name) + '</div><div class="meta">' + f.path + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+      el.innerHTML = html;
+    }
+  } catch(e) {
+    document.getElementById('formContent').innerHTML = '<div class="empty">❌ ' + e.message + '</div>';
+  }
+}
+
+function renderForm() {
+  const el = document.getElementById('formContent');
+  const fileName = path.split('/').pop();
+
+  if (fileName === 'home.json') {
+    el.innerHTML = renderObjectEditor(currentData, HOME_FIELDS);
+  } else if (fileName === 'reviews.json') {
+    const items = currentData.items || [];
+    el.innerHTML = renderArrayEditor(items, REVIEW_FIELDS, 'Відгуки');
+  } else if (fileName.includes('faq') || fileName.includes('question')) {
+    el.innerHTML = renderObjectEditor(currentData, FAQ_FIELDS);
+  } else {
+    el.innerHTML = renderObjectEditor(currentData, PRODUCT_FIELDS);
+  }
+}
+
+function collectArray(fields) {
+  const container = document.getElementById('arrayContainer');
+  if (!container) return [];
+  const items = [];
+  container.querySelectorAll('.list-row').forEach(row => {
+    const obj = {};
+    fields.forEach(f => {
+      const id = row.querySelector('#f-' + f.name.replace(/\./g, '_'));
+      if (!id) return;
+      if (f.type === 'checkbox') obj[f.name] = id.checked;
+      else if (f.type === 'number') obj[f.name] = Number(id.value);
+      else obj[f.name] = id.value;
+    });
+    items.push(obj);
+  });
+  return items;
+}
+
+function addItem() {
+  const fileName = path.split('/').pop();
+  const fields = fileName === 'reviews.json' ? REVIEW_FIELDS : [];
+  const container = document.getElementById('arrayContainer');
+  if (!container) return;
+  const idx = container.querySelectorAll('.list-row').length;
+  const div = document.createElement('div');
+  div.className = 'list-row';
+  div.dataset.idx = idx;
+  let html = '<button class="del-btn" onclick="removeItem(' + idx + ')">✕</button>';
+  html += '<div style="font-size:11px;color:#94a3b8;margin-bottom:6px">#' + (idx+1) + '</div>';
+  fields.forEach(f => { html += makeFormField(f, ''); });
+  div.innerHTML = html;
+  container.appendChild(div);
+}
+
+function removeItem(idx) {
+  const container = document.getElementById('arrayContainer');
+  const item = container.querySelector('[data-idx="' + idx + '"]');
+  if (item) item.remove();
+  container.querySelectorAll('.list-row').forEach((el, i) => {
+    el.dataset.idx = i;
+    const label = el.querySelector('div:first-child');
+    if (label) label.textContent = '#' + (i+1);
+  });
+}
+
+async function save() {
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true; btn.textContent = 'Збереження...';
+  try {
+    let data;
+    const fileName = path.split('/').pop();
+    if (fileName === 'reviews.json') {
+      const items = collectArray(REVIEW_FIELDS);
+      data = { items };
+    } else if (view === 'raw') {
+      data = JSON.parse(document.getElementById('rawEditor').value);
+    } else {
+      data = collectForm(PRODUCT_FIELDS);
+    }
+
+    const body = {
+      message: 'Update ' + path,
+      content: JSON.stringify(data, null, 2),
+      branch: 'main',
+    };
+    if (currentSha) body.sha = currentSha;
+
+    await api('PUT', '/api/git/github/contents/' + path, body);
+    currentData = data;
+    msg('✅ Збережено!', 'ok');
+  } catch(e) { msg('❌ ' + e.message, 'err'); }
+  btn.disabled = false; btn.textContent = 'Зберегти';
+}
+</script>
+</body>
+</html>
