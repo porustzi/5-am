@@ -1,0 +1,28 @@
+{
+  "id": "",
+  "brand": "Maison Margiela",
+  "price": 13000,
+  "name": "",
+  "name_ru": "",
+  "name_en": "Maison Margiela evolution",
+  "sizes": "41",
+  "sizes_ru": "",
+  "sizes_en": "",
+  "seller_tg": "@barvixaluxuryvillage10",
+  "condition": "10/10",
+  "condition_ru": "",
+  "condition_en": "",
+  "category": "Взуття",
+  "category_ru": "",
+  "category_en": "",
+  "description": "",
+  "description_ru": "",
+  "description_en": "",
+  "images": [
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782415811506-photo_2026-06-25_22-26-25.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782415821454-photo_2026-06-24_14-45-39.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782415828122-photo_2026-06-24_14-45-40.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782415833610-photo_2026-06-24_14-45-39_2_.jpg"
+  ],
+  "sold": false
+}
