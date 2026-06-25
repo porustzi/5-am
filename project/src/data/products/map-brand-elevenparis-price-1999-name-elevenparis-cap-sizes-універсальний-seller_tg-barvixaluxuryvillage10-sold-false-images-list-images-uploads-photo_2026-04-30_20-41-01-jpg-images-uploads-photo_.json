@@ -1,6 +1,7 @@
 {
+  "id": "567",
   "brand": "Elevenparis",
-  "price": 1999,
+  "price": 1998,
   "name": "Elevenparis cap",
   "name_ru": "Elevenparis cap",
   "name_en": "Elevenparis cap",
@@ -8,18 +9,20 @@
   "sizes_ru": "универсальный",
   "sizes_en": "one size",
   "seller_tg": "@barvixaluxuryvillage10",
-  "sold": false,
+  "condition": "Новий",
+  "condition_ru": "Новый",
+  "condition_en": "New",
+  "category": "Інше",
+  "category_ru": "Другое",
+  "category_en": "Other",
+  "description": "",
+  "description_ru": "",
+  "description_en": "",
   "images": [
     "/images/uploads/photo_2026-04-30_20-41-01.jpg",
     "/images/uploads/photo_2026-04-30_20-41-02.jpg",
     "/images/uploads/photo_2026-04-30_20-41-03.jpg",
     "/images/uploads/photo_2026-04-30_20-41-03-2-.jpg"
   ],
-  "id": "567",
-  "condition": "Новий",
-  "category": "Інше",
-  "category_ru": "Другое",
-  "category_en": "Other",
-  "condition_ru": "Новый",
-  "condition_en": "New"
+  "sold": false
 }
