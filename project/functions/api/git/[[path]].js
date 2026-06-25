@@ -57,7 +57,7 @@ export async function onRequest(context) {
 
   // Build GitHub API URL
   let gitPath = url.pathname.replace(/^\/api\/git\//, '').replace(/^github\/contents\//, '');
-  gitPath = BASE_PATH + gitPath;
+  if (!gitPath.startsWith(BASE_PATH)) gitPath = BASE_PATH + gitPath;
   const ref = url.searchParams.get('ref') || BRANCH;
   const githubToken = env.GITHUB_PAT;
   if (!githubToken) return json({ error: 'github_pat_not_set' }, 500);
