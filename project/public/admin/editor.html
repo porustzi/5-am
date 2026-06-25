@@ -287,7 +287,7 @@ async function loadFile() {
     document.getElementById('rawEditor').value = JSON.stringify(currentData, null, 2);
     document.getElementById('saveBtn').style.display = 'inline-block';
     document.getElementById('translateBtn').style.display = 'inline-block';
-    document.getElementById('deleteBtn').style.display = 'inline-block';
+    if (path.split('/').pop() !== 'home.json') document.getElementById('deleteBtn').style.display = 'inline-block';
     renderForm();
     return;
   }
@@ -299,7 +299,7 @@ async function loadFile() {
     document.getElementById('rawEditor').value = JSON.stringify(currentData, null, 2);
     document.getElementById('saveBtn').style.display = 'inline-block';
     document.getElementById('translateBtn').style.display = 'inline-block';
-    document.getElementById('deleteBtn').style.display = 'inline-block';
+    if (path.split('/').pop() !== 'home.json') document.getElementById('deleteBtn').style.display = 'inline-block';
     renderForm();
   } catch(e) {
     document.getElementById('formContent').innerHTML = '<div class="empty">❌ ' + e.message + '</div>';
