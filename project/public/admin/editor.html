@@ -455,11 +455,10 @@ async function translateOne(text, to) {
       headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: text, to: to }),
     });
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    if (!resp.ok) return '';
     const data = await resp.json();
     return data.translated || '';
   } catch(e) {
-    console.error('Translate error:', e);
     return '';
   }
 }
