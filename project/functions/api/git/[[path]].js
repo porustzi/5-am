@@ -58,7 +58,8 @@ export async function onRequest(context) {
   // Build GitHub API URL
   let gitPath = url.pathname.replace(/^\/api\/git\//, '').replace(/^github\/contents\//, '');
   if (!gitPath.startsWith(BASE_PATH)) gitPath = BASE_PATH + gitPath;
-  const encodedPath = gitPath.split('/').map(s => encodeURIComponent(s)).join('/');
+  const encodedPath = gitPath.split('/').map(function(seg) { return encodeURIComponent(seg); }).join('/');
+  // VERSION=v7
   const ref = url.searchParams.get('ref') || BRANCH;
   const githubToken = env.GITHUB_PAT;
   if (!githubToken) return json({ error: 'github_pat_not_set' }, 500);
@@ -107,7 +108,7 @@ export async function onRequest(context) {
     const ghData = await ghRes.json();
 
     if (!ghRes.ok) {
-      return json({ error: 'github_error', status: ghRes.status, details: ghData }, ghRes.status);
+      return json({ error: 'github_error', status: ghRes.status, details: ghData, v:'v7', url:targetUrl, gitPath }, ghRes.status);
     }
 
     // Trigger Cloudflare Pages redeploy on write
