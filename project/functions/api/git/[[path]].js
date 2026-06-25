@@ -72,6 +72,9 @@ export async function onRequest(context) {
   } else if (request.method === 'PUT') {
     targetUrl = `${repoApi}/contents/${encodedPath}`;
     targetMethod = 'PUT';
+  } else if (request.method === 'DELETE') {
+    targetUrl = `${repoApi}/contents/${encodedPath}`;
+    targetMethod = 'DELETE';
   } else {
     return json({ error: 'method_not_supported' }, 405);
   }
@@ -96,6 +99,14 @@ export async function onRequest(context) {
     } catch (e) {
       return json({ error: 'body_parse_error', detail: e.message }, 400);
     }
+  } else if (request.method === 'DELETE') {
+    try {
+      const reqText = await request.text();
+      const reqBody = JSON.parse(reqText);
+      ghBody = { message: reqBody.message || 'Delete file', sha: reqBody.sha, branch: ref };
+    } catch (e) {
+      return json({ error: 'body_parse_error', detail: e.message }, 400);
+    }
   }
 
   try {
@@ -111,7 +122,7 @@ export async function onRequest(context) {
     }
 
     // Trigger Cloudflare Pages redeploy on write
-    if (targetMethod === 'PUT' && env.CF_API_TOKEN && env.CF_ACCOUNT_ID) {
+    if ((targetMethod === 'PUT' || targetMethod === 'DELETE') && env.CF_API_TOKEN && env.CF_ACCOUNT_ID) {
       context.waitUntil((async () => {
         try {
           await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/pages/projects/5-am/deployments`, {

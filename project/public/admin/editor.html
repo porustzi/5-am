@@ -58,6 +58,8 @@ textarea{min-height:70px;resize:vertical;line-height:1.5}
 .img-previews{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .img-preview{width:80px;height:80px;border-radius:6px;object-fit:cover;border:1px solid #e2e8f0;cursor:pointer}
 .img-preview:hover{border-color:#dc2626;opacity:.7}
+.del-file-btn{width:28px;height:28px;border-radius:6px;border:none;background:#fef2f2;color:#dc2626;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:8px}
+.del-file-btn:hover{background:#fecaca}
 </style>
 </head>
 <body>
@@ -71,6 +73,7 @@ textarea{min-height:70px;resize:vertical;line-height:1.5}
  <button class="btn-ghost" onclick="toggleView()" id="toggleBtn">JSON</button>
 <button class="btn-ghost" onclick="translateAll()" id="translateBtn" style="display:none">🌐 Перекласти</button>
 <span style="flex:1"></span>
+<button class="btn-danger" onclick="deleteFile()" id="deleteBtn" style="display:none">🗑 Видалити</button>
 <button class="btn-save" id="saveBtn" onclick="save()" style="display:none">Зберегти</button>
 </div>
 <div class="form-view" id="formView"><div class="content" id="formContent"><div class="loading">Завантаження...</div></div></div>
@@ -284,6 +287,7 @@ async function loadFile() {
     document.getElementById('rawEditor').value = JSON.stringify(currentData, null, 2);
     document.getElementById('saveBtn').style.display = 'inline-block';
     document.getElementById('translateBtn').style.display = 'inline-block';
+    document.getElementById('deleteBtn').style.display = 'inline-block';
     renderForm();
     return;
   }
@@ -295,6 +299,7 @@ async function loadFile() {
     document.getElementById('rawEditor').value = JSON.stringify(currentData, null, 2);
     document.getElementById('saveBtn').style.display = 'inline-block';
     document.getElementById('translateBtn').style.display = 'inline-block';
+    document.getElementById('deleteBtn').style.display = 'inline-block';
     renderForm();
   } catch(e) {
     document.getElementById('formContent').innerHTML = '<div class="empty">❌ ' + e.message + '</div>';
@@ -318,8 +323,10 @@ async function loadFolder() {
       html += '<div style="padding:0 18px 12px"><button class="btn-save" style="padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:#000;color:#fff" onclick="createNew(\'faq\')">+ Створити FAQ</button></div>';
       items.forEach(f => {
         const name = f.name.replace('.json', '');
-        html += '<div class="file-item" onclick="location.href=\'/admin/editor.html?path=' + encodeURIComponent(f.path) + '&name=' + encodeURIComponent(name) + '&type=file\'">';
-        html += '<div class="name"><span>❓</span> ' + esc(name) + '</div><div class="meta">' + f.path + '</div>';
+        html += '<div class="file-item">';
+        html += '<div class="name" onclick="location.href=\'/admin/editor.html?path=' + encodeURIComponent(f.path) + '&name=' + encodeURIComponent(name) + '&type=file\'" style="cursor:pointer;flex:1"><span>❓</span> ' + esc(name) + '</div>';
+        html += '<div class="meta" style="margin-right:8px">' + f.path + '</div>';
+        html += '<button class="del-file-btn" onclick="event.stopPropagation();deleteFile(\'' + esc(f.sha) + '\',\'' + esc(f.path) + '\')">✕</button>';
         html += '</div>';
       });
       html += '</div>';
@@ -330,8 +337,10 @@ async function loadFolder() {
       items.forEach(f => {
         if (f.name === '.gitkeep') return;
         const name = (f.name || '').replace('.json', '').substring(0, 60);
-        html += '<div class="file-item" onclick="location.href=\'/admin/editor.html?path=' + encodeURIComponent(f.path) + '&name=' + esc(name) + '&type=file\'">';
-        html += '<div class="name"><span>📦</span> ' + esc(name) + '</div><div class="meta">' + f.path + '</div>';
+        html += '<div class="file-item">';
+        html += '<div class="name" onclick="location.href=\'/admin/editor.html?path=' + encodeURIComponent(f.path) + '&name=' + esc(name) + '&type=file\'" style="cursor:pointer;flex:1"><span>📦</span> ' + esc(name) + '</div>';
+        html += '<div class="meta" style="margin-right:8px">' + f.path + '</div>';
+        html += '<button class="del-file-btn" onclick="event.stopPropagation();deleteFile(\'' + esc(f.sha) + '\',\'' + esc(f.path) + '\')">✕</button>';
         html += '</div>';
       });
       html += '</div>';
@@ -568,6 +577,21 @@ function removeImage(url) {
   const urls = ta.value.split('\n').map(function(s) { return s.trim(); }).filter(Boolean);
   ta.value = urls.filter(function(u) { return u !== url; }).join('\n');
   updatePreviews();
+}
+
+// ─── Delete file ───────────────────────────────────────────────────
+async function deleteFile(sha, filePath) {
+  const p = filePath || path;
+  if (!confirm('Видалити ' + (p.split('/').pop() || p) + '?')) return;
+  var s = sha || currentSha;
+  if (!s) {
+    try { var d = await api('GET', '/api/git/github/contents/' + p + '?ref=main'); s = d.sha; } catch(e) { msg('❌ ' + e.message, 'err'); return; }
+  }
+  try {
+    await api('DELETE', '/api/git/github/contents/' + p, { message: 'Delete ' + p, sha: s });
+    msg('✅ Видалено', 'ok');
+    setTimeout(function() { location.href = '/admin/dashboard.html'; }, 500);
+  } catch(e) { msg('❌ ' + e.message, 'err'); }
 }
 </script>
 </body>
