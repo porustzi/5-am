@@ -1,0 +1,32 @@
+{
+  "id": "",
+  "brand": "Undercover",
+  "price": 5499,
+  "name": "Undercover x GU zip ",
+  "name_ru": "Undercover x GU zip ",
+  "name_en": "Undercover x GU zip ",
+  "sizes": "39-45",
+  "sizes_ru": "39-45",
+  "sizes_en": "39-45",
+  "seller_tg": "@htnv15",
+  "condition": "10/10",
+  "condition_ru": "10/10",
+  "condition_en": "10/10",
+  "category": "Взуття",
+  "category_ru": "Обувь ",
+  "category_en": "Shoes",
+  "description": "",
+  "description_ru": "",
+  "description_en": "",
+  "images": [
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782672280520-photo_2026-05-09_20-52-55.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782672288601-photo_2026-05-09_20-52-56.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782672294988-photo_2026-05-09_20-52-56_2_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782672299526-photo_2026-05-09_20-52-56_3_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782672307863-photo_2026-05-09_20-52-57.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782672322480-photo_2026-05-09_20-52-57_2_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782672326101-photo_2026-05-09_20-52-57_3_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782672329502-photo_2026-05-09_20-52-57_4_.jpg"
+  ],
+  "sold": false
+}
