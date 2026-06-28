@@ -1,0 +1,28 @@
+{
+  "id": "",
+  "brand": "Semantic Design",
+  "price": 2199,
+  "name": "Semantic Design t-shirt",
+  "name_ru": "Semantic Design t-shirt",
+  "name_en": "Semantic Design t-shirt",
+  "sizes": "M-L",
+  "sizes_ru": "M-L",
+  "sizes_en": "M-L",
+  "seller_tg": "@htnv15",
+  "condition": "9/10",
+  "condition_ru": "9/10",
+  "condition_en": "9/10",
+  "category": "Футболки",
+  "category_ru": "Футболки",
+  "category_en": "T-shirts",
+  "description": "",
+  "description_ru": "",
+  "description_en": "",
+  "images": [
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782671345366-photo_2026-06-20_17-24-01_2_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782671355420-photo_2026-06-20_17-24-02_4_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782671363404-photo_2026-06-20_17-24-02_2_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782671368409-photo_2026-06-20_17-24-02_3_.jpg"
+  ],
+  "sold": false
+}
