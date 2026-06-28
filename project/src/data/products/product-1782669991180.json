@@ -1,0 +1,28 @@
+{
+  "id": "",
+  "brand": "Misbhv",
+  "price": 3499,
+  "name": "Misbhv hoodie",
+  "name_ru": "Misbhv hoodie",
+  "name_en": "Misbhv hoodie",
+  "sizes": "M-L",
+  "sizes_ru": "M-L",
+  "sizes_en": "M-L",
+  "seller_tg": "@htnv15",
+  "condition": "10/10",
+  "condition_ru": "10/10",
+  "condition_en": "10/10",
+  "category": "Худі",
+  "category_ru": "Худи",
+  "category_en": "Hoodie",
+  "description": "",
+  "description_ru": "",
+  "description_en": "",
+  "images": [
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782670119451-photo_2026-06-20_17-22-33.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782670126726-photo_2026-06-20_17-22-34_2_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782670130677-photo_2026-06-20_17-22-34.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782670135071-photo_2026-06-20_17-22-34_3_.jpg"
+  ],
+  "sold": false
+}
