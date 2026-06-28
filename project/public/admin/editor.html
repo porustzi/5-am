@@ -266,7 +266,9 @@ function getTemplate(filePath) {
   if (fileName.includes('faq') || fileName.includes('question')) {
     return { question: '', question_ru: '', question_en: '', answer: '', answer_ru: '', answer_en: '' };
   }
-  return { id: '', brand: '', price: 0, name: '', name_ru: '', name_en: '', sizes: '', sizes_ru: '', sizes_en: '',
+  var m = fileName.match(/(\d+)/);
+  var id = m ? m[1] : Date.now().toString();
+  return { id: id, brand: '', price: 0, name: '', name_ru: '', name_en: '', sizes: '', sizes_ru: '', sizes_en: '',
     seller_tg: '', condition: '', condition_ru: '', condition_en: '', category: '', category_ru: '', category_en: '',
     description: '', description_ru: '', description_en: '', images: [], sold: false };
 }

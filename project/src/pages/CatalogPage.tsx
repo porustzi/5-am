@@ -12,7 +12,7 @@ const loadedProducts: Product[] = Object.values(modules).map((mod: any) => {
   const data = mod.default ?? mod;
   return {
     ...data,
-    id: data.id ?? Math.random().toString(36).slice(2),
+    id: data.id || Math.random().toString(36).slice(2),
     category: data.category ?? 'Інше',
   };
 });

@@ -21,7 +21,7 @@ interface Product {
 const modules = import.meta.glob('../data/products/*.json', { eager: true }) as Record<string, any>;
 const allProducts: Product[] = Object.values(modules).map((mod: any) => {
   const data = mod.default ?? mod;
-  return { ...data, id: data.id ?? Math.random().toString(36).slice(2) };
+  return { ...data, id: data.id || Math.random().toString(36).slice(2) };
 });
 
 const COND_KEY_MAP: Record<string, TranslationKey> = {
