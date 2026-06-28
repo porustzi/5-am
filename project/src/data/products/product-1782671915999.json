@@ -1,0 +1,28 @@
+{
+  "id": "",
+  "brand": "Undercover",
+  "price": 2199,
+  "name": "Undercover Kosmik Noise t-shirt",
+  "name_ru": "Undercover Kosmik Noise t-shirt",
+  "name_en": "Undercover Kosmik Noise t-shirt",
+  "sizes": "M та S",
+  "sizes_ru": "М и S",
+  "sizes_en": "M and S",
+  "seller_tg": "@htnv15",
+  "condition": "9/10",
+  "condition_ru": "9/10",
+  "condition_en": "9/10",
+  "category": "Футболки",
+  "category_ru": "Футболки",
+  "category_en": "T-shirts",
+  "description": "",
+  "description_ru": "",
+  "description_en": "",
+  "images": [
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782672039010-photo_2026-06-20_17-31-47.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782672042949-photo_2026-06-20_17-31-48_2_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782672046386-photo_2026-06-20_17-31-48_3_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782672050100-photo_2026-06-20_17-31-48.jpg"
+  ],
+  "sold": false
+}
