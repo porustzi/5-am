@@ -1,0 +1,28 @@
+{
+  "id": "",
+  "brand": "Mihara Yasuhiro",
+  "price": 2199,
+  "name": "Mihara Yasuhiro t-shirt",
+  "name_ru": "Mihara Yasuhiro t-shirt",
+  "name_en": "Mihara Yasuhiro t-shirt",
+  "sizes": "L",
+  "sizes_ru": "L",
+  "sizes_en": "L",
+  "seller_tg": "@htnv15",
+  "condition": "9.5/10",
+  "condition_ru": "9.5/10",
+  "condition_en": "9.5/10",
+  "category": "Футболки",
+  "category_ru": "Футболки",
+  "category_en": " T-shirts",
+  "description": "",
+  "description_ru": "",
+  "description_en": "",
+  "images": [
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782670871988-photo_2026-06-20_17-31-03.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782670875478-photo_2026-06-20_17-31-03_2_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782670881411-photo_2026-06-20_17-31-03_3_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782670888782-photo_2026-06-20_17-31-03_4_.jpg"
+  ],
+  "sold": false
+}
