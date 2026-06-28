@@ -1,0 +1,29 @@
+{
+  "id": "",
+  "brand": "Number Nine",
+  "price": 3599,
+  "name": "Number Nine hoodie",
+  "name_ru": "Number Nine hoodie",
+  "name_en": "Number Nine hoodie",
+  "sizes": "S-M",
+  "sizes_ru": "S-M",
+  "sizes_en": "S-M",
+  "seller_tg": "@htnv15",
+  "condition": "9.5/10",
+  "condition_ru": "9.5/10",
+  "condition_en": "9.5/10",
+  "category": "Худі",
+  "category_ru": "Худи",
+  "category_en": "Hoodie",
+  "description": "",
+  "description_ru": "",
+  "description_en": "",
+  "images": [
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782669926023-photo_2026-06-20_17-21-43.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782669931836-photo_2026-06-20_17-21-44.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782669939199-photo_2026-06-20_17-21-44_2_.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782669946365-photo_2026-06-20_17-21-45.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782669951913-photo_2026-06-20_17-21-45_2_.jpg"
+  ],
+  "sold": false
+}
