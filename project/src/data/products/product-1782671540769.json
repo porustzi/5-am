@@ -1,0 +1,29 @@
+{
+  "id": "",
+  "brand": "Bedwin & The Heartbreakers",
+  "price": 1999,
+  "name": "Bedwin & The Heartbreakers t-shirt",
+  "name_ru": "Bedwin & The Heartbreakers t-shirt",
+  "name_en": "Bedwin & The Heartbreakers t-shirt",
+  "sizes": "M",
+  "sizes_ru": "M",
+  "sizes_en": "M",
+  "seller_tg": "@htnv15",
+  "condition": "9/10",
+  "condition_ru": "9/10",
+  "condition_en": "9/10",
+  "category": "Футболки",
+  "category_ru": "Футболки",
+  "category_en": " T-shirts",
+  "description": "",
+  "description_ru": "",
+  "description_en": "",
+  "images": [
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782671670988-photo_2026-06-20_17-28-19.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782671675163-photo_2026-06-20_17-28-20.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782671703324-photo_2026-06-20_17-28-21.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782671707344-photo_2026-06-20_17-28-22.jpg",
+    "https://raw.githubusercontent.com/porustzi/5-am/main/project/public/uploads/1782671711703-photo_2026-06-20_17-28-21_2_.jpg"
+  ],
+  "sold": false
+}
