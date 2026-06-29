@@ -6,10 +6,7 @@ const modules = import.meta.glob('../data/faq/*.json', { eager: true }) as Recor
 const faqItems = Object.values(modules)
   .map((mod: any) => {
     const data = mod.default ?? mod;
-    return {
-      question: String(data.question ?? ''),
-      answer: String(data.answer ?? ''),
-    };
+    return { ...data };
   })
   .filter(item => item.question);
 

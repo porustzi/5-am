@@ -55,7 +55,10 @@ export async function onRequest(context) {
   const apiUrl = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + from + '%7C' + to;
 
   try {
-    const resp = await fetch(apiUrl);
+    const controller = new AbortController();
+    const timer = setTimeout(() => { controller.abort(); }, 10000);
+    const resp = await fetch(apiUrl, { signal: controller.signal });
+    clearTimeout(timer);
     const data = await resp.json();
     if (data.responseStatus === 200 && data.responseData) {
       return json({ translated: data.responseData.translatedText });

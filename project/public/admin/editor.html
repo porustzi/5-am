@@ -478,32 +478,16 @@ async function translateAll() {
   const btn = document.getElementById('translateBtn');
   if (!btn) return;
   btn.disabled = true; btn.textContent = 'Переклад...';
-
-  const fields = document.querySelectorAll('[id^="f-"]');
-  for (const el of fields) {
-    const id = el.id.replace('f-', '');
-    if (id.endsWith('_ru') || id.endsWith('_en')) continue;
-    if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
-      const val = el.value.trim();
-      if (!val) continue;
-
-      const ruEl = document.getElementById('f-' + id + '_ru');
-      if (ruEl && !ruEl.value.trim()) {
-        const tr = await translateOne(val, 'ru');
-        if (tr) ruEl.value = tr;
-      }
-      const enEl = document.getElementById('f-' + id + '_en');
-      if (enEl && !enEl.value.trim()) {
-        const tr = await translateOne(val, 'en');
-        if (tr) enEl.value = tr;
-      }
-    }
-  }
+  await doTranslateFields();
   btn.disabled = false; btn.textContent = '🌐 Перекласти';
   msg('✅ Переклад завершено', 'ok');
 }
 
 async function autoTranslate() {
+  await doTranslateFields();
+}
+
+async function doTranslateFields() {
   const fields = document.querySelectorAll('[id^="f-"]');
   for (const el of fields) {
     const id = el.id.replace('f-', '');
@@ -511,14 +495,13 @@ async function autoTranslate() {
     if (el.tagName !== 'TEXTAREA' && el.tagName !== 'INPUT') continue;
     const val = el.value.trim();
     if (!val) continue;
-
     const ruEl = document.getElementById('f-' + id + '_ru');
-    if (ruEl && !ruEl.value.trim() && val) {
+    if (ruEl && !ruEl.value.trim()) {
       const tr = await translateOne(val, 'ru');
       if (tr) ruEl.value = tr;
     }
     const enEl = document.getElementById('f-' + id + '_en');
-    if (enEl && !enEl.value.trim() && val) {
+    if (enEl && !enEl.value.trim()) {
       const tr = await translateOne(val, 'en');
       if (tr) enEl.value = tr;
     }

@@ -92,12 +92,10 @@ export function orgSchema() {
   };
 }
 
-const COND_MAP: Record<string, string> = {
-  'Новий': 'https://schema.org/NewCondition',
-  'Відмінний': 'https://schema.org/NewCondition',
-  'Хороший': 'https://schema.org/UsedCondition',
-  'Б/У': 'https://schema.org/UsedCondition',
-};
+function getItemCondition(condition: string): string | undefined {
+  if (condition === 'Новий' || condition.startsWith('10')) return 'https://schema.org/NewCondition';
+  return 'https://schema.org/UsedCondition';
+}
 
 export function productSchema(product: {
   name: string;
@@ -125,8 +123,8 @@ export function productSchema(product: {
       priceCurrency: 'UAH',
       availability: product.sold ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
     },
-    ...(product.condition && COND_MAP[product.condition]
-      ? { itemCondition: COND_MAP[product.condition] }
+    ...(product.condition
+      ? { itemCondition: getItemCondition(product.condition) }
       : {}),
   };
 }
