@@ -21,9 +21,9 @@ interface SEOProps {
 }
 
 const defaultDesc: Record<string, string> = {
-  uk: '5AM Store — преміальний дропчік та аксесуари. Купити брендовий одяг в Україні. Ресейл, 5ам, товарка. Щотижневе оновлення. Доставка по всій Україні.',
-  ru: '5AM Store — премиальный дроп и аксессуары. Купить брендовую одежду в Украине. Ресейл, 5ам, товарка. Еженедельное обновление. Доставка по всей Украине.',
-  en: '5AM Store — premium drops and accessories. Buy branded clothing in Ukraine. Resale. Weekly catalog updates. Delivery across Ukraine.',
+  uk: '5AM Store — преміальний ресейл брендового одягу та аксесуарів. Купити оригінальний streetwear в Україні. Щотижневе оновлення каталогу. Доставка по всій Україні.',
+  ru: '5AM Store — премиальный ресейл брендовой одежды и аксессуаров. Купить оригинальный streetwear в Украине. Еженедельное обновление каталога. Доставка по всей Украине.',
+  en: '5AM Store — premium resale of branded clothing & accessories. Buy authentic streetwear in Ukraine. Weekly catalog drops. Nationwide delivery.',
 };
 
 export default function SEO({ title, description, ogImage, path = '', jsonLd }: SEOProps) {
@@ -42,7 +42,7 @@ export default function SEO({ title, description, ogImage, path = '', jsonLd }: 
       <html lang={langCode} />
       <title>{pageTitle}</title>
       <meta name="description" content={pageDesc} />
-      <meta name="keywords" content="5AM, 5-ам, ресейл, товарка, одежда Украина, бренды, streetwear, дроп, премиальный дроп, Киев, resell, Україна" />
+      <meta name="keywords" content="5AM, 5AM Store, ресейл, брендовый одяг, брендовая одежда, branded clothing, streetwear, Україна, Ukraine, Киев, Kyiv, resell, premium resale" />
       <meta name="google-site-verification" content={GSC_META} />
       <meta name="theme-color" content="#000000" />
       <link rel="canonical" href={pageUrl} />
