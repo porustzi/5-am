@@ -2,8 +2,12 @@ import { useLang } from '../i18n/LanguageContext';
 
 export interface Review {
   text: string;
+  text_ru?: string;
+  text_en?: string;
   author: string;
   item: string;
+  item_ru?: string;
+  item_en?: string;
 }
 
 interface Props {
@@ -13,7 +17,7 @@ interface Props {
 const STARS = [1, 2, 3, 4, 5];
 
 export default function Reviews({ reviews }: Props) {
-  const { t } = useLang();
+  const { t, loc } = useLang();
 
   return (
     <div>
@@ -41,12 +45,12 @@ export default function Reviews({ reviews }: Props) {
               ))}
             </div>
 
-            <p className="text-zinc-300 text-sm leading-relaxed flex-1">{review.text}</p>
+            <p className="text-zinc-300 text-sm leading-relaxed flex-1">{loc(review, 'text')}</p>
 
             <div className="border-t border-zinc-800/60 pt-4 flex items-center justify-between">
               <div>
                 <p className="text-white font-semibold text-sm">{review.author}</p>
-                <p className="text-zinc-600 font-mono text-xs">{review.item}</p>
+                <p className="text-zinc-600 font-mono text-xs">{loc(review, 'item')}</p>
               </div>
               <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-xs font-bold text-white">
                 {review.author ? review.author.charAt(0) : '?'}

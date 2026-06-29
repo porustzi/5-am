@@ -3,97 +3,173 @@
     {
       "author": "archv9n",
       "item": "Number Nine hoodie",
-      "text": "пасибо за худак все кайф"
+      "item_ru": "Number Nine худи",
+      "item_en": "Number Nine hoodie",
+      "text": "пасибо за худак все кайф",
+      "text_ru": "спасибо за худи, всё кайф",
+      "text_en": "thanks for the hoodie, everything's fire"
     },
     {
       "author": "Дмитрий",
       "item": "Number Nine hoodie",
-      "text": "Все забрал, спасибо"
+      "item_ru": "Number Nine худи",
+      "item_en": "Number Nine hoodie",
+      "text": "Все забрал, спасибо",
+      "text_ru": "Всё забрал, спасибо",
+      "text_en": "Picked it up, thanks"
     },
     {
       "author": "nn",
       "item": "Mihara Yasuhiro Good Inspiration hoodie",
-      "text": "забрал спасибо все четко "
+      "item_ru": "Mihara Yasuhiro Good Inspiration худи",
+      "item_en": "Mihara Yasuhiro Good Inspiration hoodie",
+      "text": "забрал спасибо все четко ",
+      "text_ru": "забрал, спасибо, всё чётко",
+      "text_en": "picked it up, thanks, everything's solid"
     },
     {
       "author": "let1xxxzh",
       "item": "Number Nine long-sleeve",
-      "text": "от души братуха забрал все кайф"
+      "item_ru": "Number Nine лонгслив",
+      "item_en": "Number Nine long-sleeve",
+      "text": "от души братуха забрал все кайф",
+      "text_ru": "от души, братан, забрал, всё кайф",
+      "text_en": "much love bro, picked it up, everything's fire"
     },
     {
       "author": "Sany",
       "item": "Jordan 3 animal instinct",
-      "text": "Все круто класно, четкие кросы, спасибо👍"
+      "item_ru": "Jordan 3 animal instinct",
+      "item_en": "Jordan 3 animal instinct",
+      "text": "Все круто класно, четкие кросы, спасибо👍",
+      "text_ru": "Всё круто, классно, чёткие кроссы, спасибо👍",
+      "text_en": "Everything's great, solid sneakers, thanks👍"
     },
     {
       "author": "Hightest",
       "item": "Maison Margiela gats high",
-      "text": "спасибо братику за такую отличную пару, торг есть, сост хороший, жду еще класный пар на лето😊"
+      "item_ru": "Maison Margiela gats high",
+      "item_en": "Maison Margiela gats high",
+      "text": "спасибо братику за такую отличную пару, торг есть, сост хороший, жду еще класный пар на лето😊",
+      "text_ru": "спасибо брату за такую отличную пару, торг есть, состояние хорошее, жду ещё классных пар на лето😊",
+      "text_en": "thanks bro for such a great pair, willing to negotiate, good condition, waiting for more heat for summer😊"
     },
     {
       "author": "С",
       "item": "Jeremy Scott Wings 2.0",
-      "text": "Привет забрал, вообще все четко"
+      "item_ru": "Jeremy Scott Wings 2.0",
+      "item_en": "Jeremy Scott Wings 2.0",
+      "text": "Привет забрал, вообще все четко",
+      "text_ru": "Привет, забрал, вообще всё чётко",
+      "text_en": "Hey, picked it up, everything's on point"
     },
     {
       "author": "Никита",
-      "item": "Maison Margiela Evolution ",
-      "text": "спасибо большое за обувь, приехали быстрее чем я ожидал"
+      "item": "Maison Margiela Evolution",
+      "item_ru": "Maison Margiela Evolution",
+      "item_en": "Maison Margiela Evolution",
+      "text": "спасибо большое за обувь, приехали быстрее чем я ожидал",
+      "text_ru": "спасибо большое за обувь, приехали быстрее, чем я ожидал",
+      "text_en": "thank you so much for the shoes, they arrived faster than I expected"
     },
     {
       "author": "max",
       "item": "Undercover Kosmik Noise sweatshirt",
-      "text": "привет спасибо тебе за кофту крутую"
+      "item_ru": "Undercover Kosmik Noise свитшот",
+      "item_en": "Undercover Kosmik Noise sweatshirt",
+      "text": "привет спасибо тебе за кофту крутую",
+      "text_ru": "привет, спасибо тебе за крутую кофту",
+      "text_en": "hey, thanks for the dope sweatshirt"
     },
     {
       "author": "Марк",
       "item": "Undercover Kosmik Noise t-shirt",
-      "text": "Забрал, все чётко"
+      "item_ru": "Undercover Kosmik Noise футболка",
+      "item_en": "Undercover Kosmik Noise t-shirt",
+      "text": "Забрал, все чётко",
+      "text_ru": "Забрал, всё чётко",
+      "text_en": "Picked it up, all good"
     },
     {
       "author": "art228765",
       "item": "Худі Mihara Yasuhiro Good Inspiration",
-      "text": "Спасибо большое\nВаще ахуенная кофта😁"
+      "item_ru": "Худи Mihara Yasuhiro Good Inspiration",
+      "item_en": "Mihara Yasuhiro Good Inspiration hoodie",
+      "text": "Спасибо большое\nВаще ахуенная кофта😁",
+      "text_ru": "Спасибо большое\nВообще офигенная кофта😁",
+      "text_en": "Thank you so much\nAbsolutely fire hoodie😁"
     },
     {
       "author": "никита",
       "item": "Кеди Palm angels",
-      "text": "да ваще кайфовые шузы,всё отлично, качество хорошее и отправил быстро ваще"
+      "item_ru": "Кеды Palm Angels",
+      "item_en": "Palm Angels sneakers",
+      "text": "да ваще кайфовые шузы,всё отлично, качество хорошее и отправил быстро ваще",
+      "text_ru": "да вообще кайфовые шузы, всё отлично, качество хорошее и отправил быстро вообще",
+      "text_en": "fire sneakers, everything's great, good quality and shipped super fast"
     },
     {
       "author": "kkk",
       "item": "Худі Acmé de la vie hoodie",
-      "text": "забрала, харашо сіла"
+      "item_ru": "Худи Acmé de la vie",
+      "item_en": "Acmé de la vie hoodie",
+      "text": "забрала, харашо сіла",
+      "text_ru": "забрала, хорошо села",
+      "text_en": "picked it up, fits great"
     },
     {
       "author": "oneride",
       "item": "Maison Margiela future low racing themed 🏁🏁🏁",
-      "text": "все получил пасибо братан"
+      "item_ru": "Maison Margiela future low racing themed 🏁🏁🏁",
+      "item_en": "Maison Margiela future low racing themed 🏁🏁🏁",
+      "text": "все получил пасибо братан",
+      "text_ru": "всё получил, спасибо, братан",
+      "text_en": "got everything, thanks bro"
     },
     {
       "author": "2yzd",
       "item": "Maison Margiela x reebok instapump",
-      "text": "кросы хорошие удобные\nдоставка моментальная \nвопросов к продавцу 0"
+      "item_ru": "Maison Margiela x Reebok Instapump",
+      "item_en": "Maison Margiela x Reebok Instapump",
+      "text": "кросы хорошие удобные\nдоставка моментальная \nвопросов к продавцу 0",
+      "text_ru": "кроссы хорошие, удобные\nдоставка моментальная\nвопросов к продавцу 0",
+      "text_en": "great comfortable sneakers\nlightning fast shipping\nzero complaints about the seller"
     },
     {
       "author": "тимофей",
-      "item": "Худі Undercover ",
-      "text": "пасиб, все качественно и очень дешево "
+      "item": "Худі Undercover",
+      "item_ru": "Худи Undercover",
+      "item_en": "Undercover hoodie",
+      "text": "пасиб, все качественно и очень дешево ",
+      "text_ru": "спасибо, всё качественно и очень дёшево",
+      "text_en": "thanks, great quality and a steal"
     },
     {
       "author": "влад",
       "item": "Maison Margiela evolution",
-      "text": "кросы забрал все ахуено"
+      "item_ru": "Maison Margiela Evolution",
+      "item_en": "Maison Margiela Evolution",
+      "text": "кросы забрал все ахуено",
+      "text_ru": "кроссы забрал, всё офигенно",
+      "text_en": "got the sneakers, everything's sick"
     },
     {
       "author": "jjexje",
       "item": "Undercover x Gu zip",
-      "text": "кеды забрал, все заебись, огромное спасибо "
+      "item_ru": "Undercover x GU zip",
+      "item_en": "Undercover x GU zip",
+      "text": "кеды забрал, все заебись, огромное спасибо ",
+      "text_ru": "кеды забрал, всё заебись, огромное спасибо",
+      "text_en": "got the sneakers, everything's awesome, huge thanks"
     },
     {
       "author": "Діана",
       "item": "Undercover x Gu zip",
-      "text": "Забрала все супер, спасибо "
+      "item_ru": "Undercover x GU zip",
+      "item_en": "Undercover x GU zip",
+      "text": "Забрала все супер, спасибо ",
+      "text_ru": "Забрала, всё супер, спасибо",
+      "text_en": "Picked it up, everything's great, thanks"
     }
   ]
 }
