@@ -21,7 +21,7 @@ interface SEOProps {
 }
 
 const defaultDesc: Record<string, string> = {
-  uk: '5AM Store — преміальний ресейл брендового одягу та аксесуарів. Купити оригінальний streetwear в Україні. Щотижневе оновлення каталогу. Доставка по всій Україні.',
+  uk: '5AM Store — привозим оригінальні речі з усього світу. Преміальний ресейл брендового одягу та аксесуарів. Доставка по всій Україні.',
   ru: '5AM Store — премиальный ресейл брендовой одежды и аксессуаров. Купить оригинальный streetwear в Украине. Еженедельное обновление каталога. Доставка по всей Украине.',
   en: '5AM Store — premium resale of branded clothing & accessories. Buy authentic streetwear in Ukraine. Weekly catalog drops. Nationwide delivery.',
 };
